@@ -15790,7 +15790,7 @@ Principal Component Scores (first few rows):
 <span class="n">ols_x</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 
 <span class="c1"># predicting the model on itself</span>
-<span class="n">prediction</span> <span class="o">=</span> <span class="n">ols_x</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">prediction</span> <span class="o">=</span> <span class="n">ols_x</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
 <span class="c1"># calculating the MSE</span>
 <span class="n">mse_ols_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">prediction</span> <span class="o">-</span> <span class="n">y_test</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
@@ -15835,7 +15835,7 @@ Principal Component Scores (first few rows):
   1.18244076e+01 -1.79134701e+00  7.49952585e+00  9.57821838e+00
  -2.78719926e+00 -2.23772641e+00 -5.84268597e-01 -3.48923291e-01
   1.14683303e+00  1.02046650e+00]
-MSE: 23.528930607677676
+MSE: 4.334076605292409
 
 ---------------------------------------------------------------------------
 </pre>
@@ -15857,6 +15857,7 @@ MSE: 23.528930607677676
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># performing the PCA transformation again for easier reference</span>
 <span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="n">X_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_pca_test</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
 <span class="c1"># formula for running the ols on different values of k</span>
 <span class="k">def</span> <span class="nf">fit_ols_for_k</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
@@ -15864,7 +15865,7 @@ MSE: 23.528930607677676
     <span class="n">model_Z</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_pca</span><span class="p">[:,</span> <span class="p">:</span><span class="n">k</span><span class="p">],</span> <span class="n">y_train</span><span class="p">)</span>
     
     <span class="c1"># predicting on the test set transformed into the PCA space</span>
-    <span class="n">prediction</span> <span class="o">=</span> <span class="n">model_Z</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_pca</span><span class="p">[:,</span> <span class="p">:</span><span class="n">k</span><span class="p">])</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">model_Z</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_pca_test</span><span class="p">[:,</span> <span class="p">:</span><span class="n">k</span><span class="p">])</span>
     
     <span class="c1"># calculating the MSE</span>
     <span class="n">mse_Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">prediction</span> <span class="o">-</span> <span class="n">y_test</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
@@ -15904,18 +15905,18 @@ MSE: 23.528930607677676
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>Results for k=1:
 Coefficients: [0.01687943]
-MSE: 15.026864642641465
+MSE: 15.01789807504581
 
 ---------------------------------------------------------------------------
 Results for k=5:
 Coefficients: [ 0.01687943  0.04055752 -0.40126178 -0.04866477 -0.9367122 ]
-MSE: 17.429419813414164
+MSE: 12.470382816407554
 
 ---------------------------------------------------------------------------
 Results for k=10:
 Coefficients: [ 0.01687943  0.04055752 -0.40126178 -0.04866477 -0.9367122   0.52798791
  -0.53136266 -0.08113065 -0.6672775  -0.62775569]
-MSE: 20.441690618275047
+MSE: 9.035481209805694
 
 ---------------------------------------------------------------------------
 </pre>
@@ -15999,22 +16000,22 @@ experiment is performed only once. (The slide averages over many experiments.)</
     <tr>
       <th>0</th>
       <td>OLS</td>
-      <td>23.528931</td>
+      <td>4.334077</td>
     </tr>
     <tr>
       <th>1</th>
       <td>PCA k=1</td>
-      <td>15.026865</td>
+      <td>15.017898</td>
     </tr>
     <tr>
       <th>2</th>
       <td>PCA k=5</td>
-      <td>17.429420</td>
+      <td>12.470383</td>
     </tr>
     <tr>
       <th>3</th>
       <td>PCA k=10</td>
-      <td>20.441691</td>
+      <td>9.035481</td>
     </tr>
   </tbody>
 </table>
